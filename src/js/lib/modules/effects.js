@@ -24,16 +24,32 @@ $.prototype.animateOverTime = function (dur, cb, fin) {
     return _animateOverTime;
 };
 
+$.prototype.fadeInTech = function (i, dur, display, fin) {
+    this[i].style.display = display || 'block';
+
+    const _fadeIn = (complection) => {
+        this[i].style.opacity = complection;
+    };
+
+    const ani = this.animateOverTime(dur, _fadeIn, fin);
+    requestAnimationFrame(ani);
+};
+
+$.prototype.fadeOutTech = function (i, dur, fin) {
+    const _fadeOut = (complection) => {
+        this[i].style.opacity = 1 - complection;
+        if (complection === 1) {
+            this[i].style.display = 'none';
+        }
+    };
+
+    const ani = this.animateOverTime(dur, _fadeOut, fin);
+    requestAnimationFrame(ani);
+};
+
 $.prototype.fadeIn = function (dur, display, fin) {
     for (let i = 0; i < this.length; i++) {
-        this[i].style.display = display || 'block';
-
-        const _fadeIn = (complection) => {
-            this[i].style.opacity = complection;
-        };
-
-        const ani = this.animateOverTime(dur, _fadeIn, fin);
-        requestAnimationFrame(ani);
+        this.fadeInTech(i, dur, display, fin);
     }
 
     return this;
@@ -41,17 +57,19 @@ $.prototype.fadeIn = function (dur, display, fin) {
 
 $.prototype.fadeOut = function (dur, fin) {
     for (let i = 0; i < this.length; i++) {
+        this.fadeOutTech(i, dur, fin);
+    }
 
+    return this;
+};
 
-        const _fadeOut = (complection) => {
-            this[i].style.opacity = 1 - complection;
-            if (complection === 1) {
-                this[i].style.display = 'none';
-            }
-        };
-
-        const ani = this.animateOverTime(dur, _fadeOut, fin);
-        requestAnimationFrame(ani);
+$.prototype.fadeToggle = function (dur, display, fin) {
+    for (let i = 0; i < this.length; i++) {
+        if (window.getComputedStyle(this[i]).display === 'none') {
+            this.fadeInTech(i, dur, display, fin);
+        } else {
+            this.fadeOutTech(i, dur, fin);
+        }
     }
 
     return this;

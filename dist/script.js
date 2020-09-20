@@ -2241,16 +2241,33 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.animateOverTime = functi
   return _animateOverTime;
 };
 
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeInTech = function (i, dur, display, fin) {
+  this[i].style.display = display || 'block';
+
+  const _fadeIn = complection => {
+    this[i].style.opacity = complection;
+  };
+
+  const ani = this.animateOverTime(dur, _fadeIn, fin);
+  requestAnimationFrame(ani);
+};
+
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOutTech = function (i, dur, fin) {
+  const _fadeOut = complection => {
+    this[i].style.opacity = 1 - complection;
+
+    if (complection === 1) {
+      this[i].style.display = 'none';
+    }
+  };
+
+  const ani = this.animateOverTime(dur, _fadeOut, fin);
+  requestAnimationFrame(ani);
+};
+
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, display, fin) {
   for (let i = 0; i < this.length; i++) {
-    this[i].style.display = display || 'block';
-
-    const _fadeIn = complection => {
-      this[i].style.opacity = complection;
-    };
-
-    const ani = this.animateOverTime(dur, _fadeIn, fin);
-    requestAnimationFrame(ani);
+    this.fadeInTech(i, dur, display, fin);
   }
 
   return this;
@@ -2258,16 +2275,19 @@ _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeIn = function (dur, 
 
 _core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeOut = function (dur, fin) {
   for (let i = 0; i < this.length; i++) {
-    const _fadeOut = complection => {
-      this[i].style.opacity = 1 - complection;
+    this.fadeOutTech(i, dur, fin);
+  }
 
-      if (complection === 1) {
-        this[i].style.display = 'none';
-      }
-    };
+  return this;
+};
 
-    const ani = this.animateOverTime(dur, _fadeOut, fin);
-    requestAnimationFrame(ani);
+_core__WEBPACK_IMPORTED_MODULE_0__["default"].prototype.fadeToggle = function (dur, display, fin) {
+  for (let i = 0; i < this.length; i++) {
+    if (window.getComputedStyle(this[i]).display === 'none') {
+      this.fadeInTech(i, dur, display, fin);
+    } else {
+      this.fadeOutTech(i, dur, fin);
+    }
   }
 
   return this;
@@ -2337,13 +2357,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_lib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./lib/lib */ "./src/js/lib/lib.js");
 
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('#first').on('click', () => {
-  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(1).fadeOut(800);
+  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(1).fadeToggle(800);
 });
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('[data-count="second"]').on('click', () => {
-  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(2).fadeOut(800);
+  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('div').eq(2).fadeToggle(800);
 });
 Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('button').eq(2).on('click', () => {
-  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.w-500').fadeOut(800);
+  Object(_lib_lib__WEBPACK_IMPORTED_MODULE_0__["default"])('.w-500').fadeToggle(800);
 });
 
 /***/ })
